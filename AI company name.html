@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title> AI company name Genrator</title>
+</head>
+<style>
+    body {
+        background-color: #bbc9d1;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+
+    a {
+        color: #262527;
+    }
+
+    .container {
+        margin: 120px auto;
+        max-width: 600px;
+    }
+
+    header {
+        margin-bottom: 30px;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 800;
+        font-size: 36px;
+        line-height: 1.5;
+        color: #272044;
+    }
+
+    form {
+        padding: 30px;
+        background-color: white;
+        box-shadow: 0px 20px 60px rgba(65, 50, 100, 0.08);
+        border-radius: 10px;
+        display: flex;
+        margin-bottom: 30px;
+    }
+
+    .instructions {
+        padding: 16px;
+        border: 1px solid rgba(39, 33, 66, 0.5);
+        width: 80%;
+        font-size: 16px;
+        border-radius: 50px;
+        line-height: 20px;
+        color: #272044;
+    }
+
+    .submit-button {
+        margin-left: 10px;
+        background: #55e7aa;
+        color: white;
+        border: none;
+        width: 150px;
+        font-size: 16px;
+        border-radius: 50px;
+        padding: 14px 24px;
+    }
+
+    .company {
+        font-size: 16px;
+        background-color: #fff;
+        padding: 20px;
+        line-height: 2;
+        border-left: 3px solid #55e7aa;
+        box-shadow: 0px 4px 30px 0px rgba(39, 33, 66, 0.03);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .strong {
+        color: #885df1;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 30px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Company name Generator</h1>
+        </header>
+
+        <main>
+            <form id="company-generator-form">
+                <input type="text" placeholder="Enter the subject of an avatar" autofocus required autocomplete="off"
+                    class="instructions" id="user-instructions" />
+                <input type="submit" class="submit-button" />
+
+            </form>
+            <div class="company hidden" id="company"></div>
+        </main>
+
+        <footer>
+            <p class="text-center mt-5 text-decoration-color: #bab9bb ">
+                <a href="https://github.com/biotech-Dlvr/" target="_blank"
+                    style="color: #19191a; font-size: smaller;">GitHub repository</a>
+                by Azar Delavari
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function displayCompany(response) {
+            new Typewriter("#company", {
+                strings: response.data.answer,
+                autoStart: true,
+                delay: 1,
+                cursor: "",
+            });
+        }
+
+        function generateCompanyName(event) {
+            event.preventDefault();
+
+            let instructionsInput = document.querySelector("#user-instructions");
+            let apiKey = "2046c535afeb092fo82f1d306d8a2b2t";
+            let context =
+                "You are a company name generator expert and creative. Your mission is to generate a company name. Make sure to follow the user instructions.<br /> Sign the company name with 'SheCodes AI' at next line inside a <strong> element.";
+            let prompt = `User instructions: Generate a company name that ${instructionsInput.value}`;
+            let apiURL = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+            let companyElement = document.querySelector("#company");
+            companyElement.classList.remove("hidden");
+            companyElement.innerHTML = `<div class="generating">⏳ Generating a company name that ${instructionsInput.value}</div>`;
+
+            axios.get(apiURL).then(displayCompany);
+        }
+
+        let companyFormElement = document.querySelector("#company-generator-form");
+        companyFormElement.addEventListener("submit", generateCompanyName);
+    </script>
+
+</body>
+
+</html>
